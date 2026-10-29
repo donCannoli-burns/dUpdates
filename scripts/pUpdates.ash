@@ -5,7 +5,20 @@ void pInitUpdates(string script);
 void pAddUpdate(string script, string update);
 void pCheckUpdate(string script);
 
-string filePrefix = "data/pUpdates/prusias_pUpdates_";
+string filePrefix = "data/dUpdates/prusias_pUpdates_";
+string legacyFilePrefix = "data/pUpdates/prusias_pUpdates_";
+
+// Retain read-only compatibility with update data from older installations.
+string updatesFileToRead(string script) {
+    string preferred = filePrefix + script + ".txt";
+    string[int] existing;
+    if (file_to_map(preferred, existing))
+        return preferred;
+    string legacy = legacyFilePrefix + script + ".txt";
+    if (file_to_map(legacy, existing))
+        return legacy;
+    return preferred;
+}
 
 void goldHTMLprint(string text) {
     print_html("<font color=eda800>" + text + "</font>");
@@ -82,7 +95,7 @@ void pAddUpdate(string script, string update) {
     
     string fileName = filePrefix + script + ".txt";
     string[int] updates;
-    file_to_map(fileName, updates);
+    file_to_map(updatesFileToRead(script), updates);
     int version = updates[-1].to_int() + 1;
     updates[-1] = "" + version;
     updates[version] = update;
@@ -97,8 +110,8 @@ void pCheckUpdate(string script) {
     //initialize
     if (get_property(property) == "")
         set_property(property, "-1");
-    //get data
-    string fileName = filePrefix + script + ".txt";
+    // get data from the new folder, with fallback to the legacy folder.
+    string fileName = updatesFileToRead(script);
     string[int] updates;
     file_to_map(fileName, updates);
     int version = updates[-1].to_int();
