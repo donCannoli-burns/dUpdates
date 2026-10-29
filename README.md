@@ -27,6 +27,10 @@ git delete donCannoli-burns-dUpdates-main
 
 If you previously installed the original upstream project, use `git list` to confirm its installed project ID before optionally deleting it with `git delete Prusias-kol-pUpdates-main`. Avoid keeping upstream and fork versions installed simultaneously when they supply the same script filenames.
 
+## Dependencies
+
+None required for the `dUpdates` library itself. Its former `dependencies.txt` was removed because referencing `donCannoli-burns/dUpdates` from within `dUpdates` would create a self-dependency. Other scripts, such as `dLooper`, should declare `https://github.com/donCannoli-burns/dUpdates main` in their own dependency files.
+
 ## How to use
 
 Run `pUpdates help` in KoLmafia to see the existing commands. Initialize tracking for a script with `pUpdates init <scriptname>`, add a note with `pUpdates add <scriptname> <update text>`, and display unseen changes with `pUpdates check <scriptname>`. Use a consistent no-spaces script name.
