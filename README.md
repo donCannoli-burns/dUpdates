@@ -1,32 +1,71 @@
-# pUpdates
-Library for Script Updates
+# dUpdates
 
-## Checkout
+> **Original project and credit:** [Prusias-kol/pUpdates](https://github.com/Prusias-kol/pUpdates) by Prusias-kol. This is a separate experimental fork maintained at [donCannoli-burns/dUpdates](https://github.com/donCannoli-burns/dUpdates).
+>
+> **EXPERIMENTAL — USE AT YOUR OWN RISK.** This fork is not guaranteed to be stable or safe. Review settings and scripts before running them, especially commands that spend turns, change inventory, use the mall, PvP, or ascend. The upstream author is not responsible for modifications in this fork.
+
+KoLmafia script-update library derived from pUpdates. **The installed command and file name remain `pUpdates` / `pUpdates.ash`**, and compatibility preference names retain the historic `prusias_pUpdates_` prefix.
+
+## Install, update, and remove
+
+Run these commands in the **KoLmafia gCLI** (not your operating system's Git shell).
+
+**Install**
 ```
-git checkout https://github.com/Prusias-kol/pUpdates main
+git checkout https://github.com/donCannoli-burns/dUpdates main
 ```
 
-## How to setup
-Run `pupdates help` for guidance on how to setup the file data. Make sure the scriptname u pick is consistently used.
-
-Next, make sure the `data/pUpdates/prusias_pUpdates_<your Script Name here>.txt` file is added to your git repo
-
-Your folder structure should look like this on github:  
-- `manifest.json` - described below
-- `kolmafia/dependencies.txt` - copied from this repo
-- `kolmafia/scripts/<your script here>` - all of your script files go here
-- `kolmafia/data/<your data here>` - all of your data files go here
-- `kolmafia/data/pUpdates/prusias_pUpdates_<your Script Name here>.txt` - file you found above
-
-manifest.json should be.   
+**Update**
 ```
+git update donCannoli-burns-dUpdates-main
+```
+
+**Remove this fork**
+```
+git delete donCannoli-burns-dUpdates-main
+```
+
+If you previously installed the original upstream project, use `git list` to confirm its installed project ID before optionally deleting it with `git delete Prusias-kol-pUpdates-main`. Avoid keeping upstream and fork versions installed simultaneously when they supply the same script filenames.
+
+## How to use
+
+Run `pUpdates help` in KoLmafia to see the existing commands. Initialize tracking for a script with `pUpdates init <scriptname>`, add a note with `pUpdates add <scriptname> <update text>`, and display unseen changes with `pUpdates check <scriptname>`. Use a consistent no-spaces script name.
+
+## Update data layout
+
+The preferred update-data folder is now **`data/dUpdates/`**, not `data/pUpdates/`. The historic `prusias_pUpdates_` file prefix is deliberately preserved for compatibility.
+
+For a script named `example`, the data file is:
+
+```
+kolmafia/data/dUpdates/prusias_pUpdates_example.txt
+```
+
+If another repository includes such a file, a typical KoLmafia-compatible Git layout is:
+
+```
+manifest.json
+kolmafia/dependencies.txt
+kolmafia/scripts/<your scripts>
+kolmafia/data/dUpdates/prusias_pUpdates_<scriptname>.txt
+```
+
+Use `manifest.json` containing:
+
+```json
 {
-	"root_directory": "kolmafia"
+  "root_directory": "kolmafia"
 }
 ```
 
-## How to add updates
-Now that this is setup, refer to `pupdates help` for how to add new updates. Afterwards, **make sure to update** the `data/prusias_pUpdates_<your Script Name here>.txt` file on github.
+The updated `pUpdates.ash` implementation reads from `data/dUpdates/` first and falls back to `data/pUpdates/` for existing installations. New update entries are written to the new directory. Existing saved version preferences remain unchanged.
 
-## How to show the user updates
-Wherever in your script you would like to ping the user with new updates (when they happen), do a cli execute call to `ploop check <scriptname>`. This will only print stuff if new updates are detected. Great way to educate users on new features!
+If installing this library as a dependency in another project's `dependencies.txt`, use the fork URL:
+
+```
+https://github.com/donCannoli-burns/dUpdates main
+```
+
+## Displaying updates
+
+Use `pUpdates check <scriptname>` from a script or gCLI to print new entries. The upstream documentation sometimes referred to `ploop check`; that is a different wrapper command, not the general update-library command.
