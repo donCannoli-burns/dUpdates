@@ -73,3 +73,9 @@ https://github.com/donCannoli-burns/dUpdates main
 ## Displaying updates
 
 Use `pUpdates check <scriptname>` from a script or gCLI to print new entries. The upstream documentation sometimes referred to `ploop check`; that is a different wrapper command, not the general update-library command.
+
+## Consolidation status (2026-10-29)
+
+The hardened `pUpdates.ash` command now ships in [don_custom_functions](https://github.com/donCannoli-burns/don_custom_functions), backed by `don_updates_lib.ash` from [don-ash-lib](https://github.com/donCannoli-burns/don-ash-lib). It retains `prusias_pUpdates_<scriptname>_localVersion`, reads both `data/dUpdates` and legacy `data/pUpdates`, validates filenames and update versions, and avoids writing preferences when data is invalid.
+
+The old repository is retained for provenance, but should not be installed beside the absorbed `pUpdates.ash` entrypoint. The [dLooper](https://github.com/donCannoli-burns/dLooper) dependency file now relies on the already-declared don_custom_functions instead of installing this repository separately. Experimental; live KoLmafia verification pending.
